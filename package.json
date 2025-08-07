@@ -1,0 +1,48 @@
+{
+  "name": "capacitor-soi-tscale-weighing-device-connector",
+  "version": "0.0.1",
+  "description": "React hook for connecting to T-Scale weighing devices in Capacitor apps via Tibbo DS1101 (Serial Over IP Module)",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "author": "",
+  "license": "NOLICENSE",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShlomoCode/capacitor-soi-tscale-weighing-device-connector.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ShlomoCode/capacitor-soi-tscale-weighing-device-connector/issues"
+  },
+  "keywords": [
+    "react",
+    "hook",
+    "capacitor",
+    "weighing",
+    "tscale",
+    "tibbo",
+    "ds1101"
+  ],
+  "scripts": {
+    "build": "rimraf ./dist && tsc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.9.2"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^6.0.0",
+    "react": "^18.0.0"
+  },
+  "dependencies": {
+    "@spryrocks/capacitor-socket-connection-plugin": "^6.3.0"
+  }
+}
