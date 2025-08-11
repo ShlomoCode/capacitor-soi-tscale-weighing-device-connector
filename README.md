@@ -32,8 +32,8 @@ function WeighingComponent() {
 
 ## Configuration
 
-Configure your Tibbo DS1101 in TCP Server mode and connect your T-Scale device to it. Test connectivity with:
-
+[Configure](../../wiki) your Tibbo DS1101 and connect your T-Scale device to the tibbo module via a serial connection. Test the connectivity with:
+ 
 ```bash
 telnet 192.168.10.95 1001
 ```
