@@ -2,6 +2,15 @@
 
 React hooks for connecting to T-Scale weighing devices through the Tibbo DS1101 Serial Over IP module in Capacitor applications.
 
+Compatible with capacitor 6.
+
+## Installation
+
+```bash
+npm install @spryrocks/capacitor-socket-connection-plugin@6.3.0 capacitor-soi-tscale-weighing-device-connector
+npx cap sync
+```
+
 ## Usage
 
 ```javascript
