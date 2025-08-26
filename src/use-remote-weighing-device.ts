@@ -9,8 +9,8 @@ import { useConnection } from "./use-connection";
  * through Tibbo DS1101 Serial Over IP Module
  */
 export function useRemoteWeighingDevice(options: WeighingDeviceConnectionOptions): UseRemoteWeighingDeviceReturn {
-  if (Capacitor.getPlatform() === "web") {
-    throw new Error("Web platform not supported");
+  if (Capacitor.getPlatform() !== "ios" && Capacitor.getPlatform() !== "android") {
+    throw new Error("[capacitor-soi-tscale-weighing-device-connector] This library only works on iOS and Android platforms");
   }
 
   const [lastWeight, setLastWeight] = useState<WeightReading | null>(null);
