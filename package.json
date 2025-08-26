@@ -1,6 +1,6 @@
 {
   "name": "capacitor-soi-tscale-weighing-device-connector",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React hook for connecting to T-Scale weighing devices in Capacitor apps via Tibbo DS1101 (Serial Over IP Module)",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
