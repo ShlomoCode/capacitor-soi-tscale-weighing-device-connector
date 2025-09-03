@@ -21,7 +21,7 @@ export interface UseConnectionReturn {
  * React hook for managing socket connections to remote devices
  * Handles connection lifecycle, reconnection logic, and data streaming
  */
-export function useConnection(options: UseConnectionOptions): UseConnectionReturn {
+export function useConnection(options: UseConnectionOptions, enabled: boolean): UseConnectionReturn {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("disconnected");
   const [lastConnectionError, setLastConnectionError] = useState<Error | null>(null);
 
@@ -32,6 +32,9 @@ export function useConnection(options: UseConnectionOptions): UseConnectionRetur
   const dataBufferRef = useRef<string>("");
 
   const connect = useCallback(async () => {
+    if (connectionStatus !== "disconnected") return;
+    setConnectionStatus("connecting");
+    
     if (socketRef.current) {
       await socketRef.current.close();
     }
@@ -56,16 +59,18 @@ export function useConnection(options: UseConnectionOptions): UseConnectionRetur
     };
 
     socket.onClose = () => {
+      if (!enabled) return;
       handleUnexpectedDisconnection();
     };
 
     socket.onError = (error) => {
+      if (!enabled) return;
       handleConnectionError(error as Error);
     };
 
     try {
-      setConnectionStatus("connecting");
       await socket.open(options.host, options.port);
+      
       setConnectionStatus("connected");
       setLastConnectionError(null);
     } catch (err) {
@@ -77,28 +82,24 @@ export function useConnection(options: UseConnectionOptions): UseConnectionRetur
     (connectionError: Error) => {
       setLastConnectionError(connectionError);
       setConnectionStatus("reconnecting");
-      reconnectTimeoutRef.current = setTimeout(() => {
-        connect();
-      }, RETRY_INTERVAL);
+      reconnectTimeoutRef.current = setTimeout(connect, RETRY_INTERVAL);
     },
     [connect],
   );
 
   const handleUnexpectedDisconnection = useCallback(() => {
     setConnectionStatus("reconnecting");
-    reconnectTimeoutRef.current = setTimeout(() => {
-      connect();
-    }, RETRY_INTERVAL);
+    reconnectTimeoutRef.current = setTimeout(connect, RETRY_INTERVAL);
   }, [connect]);
 
   const sendData = useCallback(
     async (data: Uint8Array) => {
-      if (!socketRef.current || !isConnected) {
+      if (connectionStatus !== "connected" || !socketRef.current) {
         throw new Error("Socket is not connected");
       }
       await socketRef.current.write(data);
     },
-    [isConnected],
+    [connectionStatus],
   );
 
   const disconnect = useCallback(async () => {
@@ -117,12 +118,17 @@ export function useConnection(options: UseConnectionOptions): UseConnectionRetur
   }, []);
 
   useEffect(() => {
-    connect();
+    if (enabled) {
+      connect();
+    } else {
+      disconnect();
+      setLastConnectionError(null);
+    }
 
     return () => {
       disconnect();
     };
-  }, [connect, disconnect]);
+  }, [enabled, connect, disconnect]);
 
   return {
     isConnected,
